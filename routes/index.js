@@ -2,9 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const uzs = require('../services/unzipService');
+const nlfiscaalService = require('../services/nlfiscaalService');
 
 const fs = require('fs');
 const dataFolderPath = './data';
+
+const jsonFilePath = './data/jsons';
 
 
 const readDirectory = (path) => {
@@ -24,7 +27,7 @@ const readDirectory = (path) => {
             if (stats.isDirectory()) {
               readDirectory(filePath);
             } else {
-              console.log('zip path: ',filePath);
+              console.log('zip path: ', filePath);
               uzs.readZipStream(filePath);
             }
           })
@@ -38,11 +41,40 @@ const readDirectory = (path) => {
   });
 };
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
 
+const checkJsonFile = () => {
+  const files = fs.readdir(jsonFilePath, (err, files) => {
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        let filePath = `${jsonFilePath}/${files[i]}`;
+        fs.stat(filePath, (err, stats) => {
+          if (err) {
+            console.log('error getting file stats: ', err)
+          }
+
+          process.nextTick(() => {
+            if (!stats.isDirectory()) {
+
+              fs.readFile(filePath, (err, res) => {
+
+                let json = JSON.parse(res);
+
+                console.log('jsonfile: ', json);
+              })
+            }
+          })
+        })
+      }
+    }
+  })
+};
+
+/* GET home page. */
+router.get('/', (req, res, next) => {
+
+  // nlfiscaalService.collectArticlesByNuids();
   readDirectory(dataFolderPath);
-  res.render('index', { title: 'Express' });
+  res.render('index', {title: 'Express'});
 });
 
 module.exports = router;

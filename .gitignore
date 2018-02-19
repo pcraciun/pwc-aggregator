@@ -6,3 +6,4 @@
 .idea/watcherTasks.xml
 .idea/workspace.xml
 .idea/runConfigurations/bin_www.xml
+node_modules

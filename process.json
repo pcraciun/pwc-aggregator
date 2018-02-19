@@ -1,0 +1,18 @@
+{
+   "apps" : [{
+      "name" : “pwc-aggregator”,
+      "script" : “app.js”
+   }],
+   "deploy" : {
+     // "production" is the environment name
+     "production" : {
+       "user" : “pavelcraciun”,
+       "host" : ["192.168.0.13"],
+       "ref"  : "origin/master",
+       "repo" : "git@github.com:shnobyl/pwc-aggregator.git",
+       "path" : "/var/www/production-repository",
+       "post-deploy" : "npm install; grunt dist"
+      },
+   }
+}
+
