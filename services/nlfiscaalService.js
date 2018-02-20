@@ -17,9 +17,8 @@ const nlFiscaalService = {
       axios.get(newsListUrl)
         .then((res) => {
           for (let key in res.data.r) {
-            const obj = res.data.r;
-            if (obj.hasOwnProperty(key)) {
-              newsUnids.push(obj[key].unid);
+            if (res.data.r.hasOwnProperty(key)) {
+              newsUnids.push(res.data.r[key].unid);
             }
           }
           resolve(newsUnids);

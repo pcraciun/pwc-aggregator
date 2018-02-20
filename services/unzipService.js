@@ -42,6 +42,7 @@ const service = {
           let entryData = zip.entryDataSync(entry.name);
           const extension = service.getExtension(entry.name);
 
+          /* ----------- xml ---------- */
           if (extension.toLowerCase() === 'xml') {
             try {
               await service.saveXmlFile(entryData, entry.name, path)
@@ -54,12 +55,15 @@ const service = {
             } catch (err) {
               console.log('ERROR XML stream: ', err);
             }
+              /* ----------- zip ---------- */
           } else if (extension.toLowerCase() === 'zip') {
             await service.readAdmZip(entryData, entry.name)
               .then(() => {
                 entry = entries[keys[index]] = null;
                 entryData = null;
               }).catch(err => console.log('Error reading zip entry: ', err));
+
+              /* ----------- json ---------- */
           } else if (extension.toLowerCase() === 'json') {
             try {
               await service.readJsonFile(entryData, entry.name)
@@ -117,6 +121,7 @@ const service = {
 
         let entryData = entry.getData();
         const extension = service.getExtension(entry.entryName);
+          /* ----------- xml ---------- */
         if (extension === 'xml') {
           try {
             await service.saveXmlFile(entryData, entry.entryName, archiveName)
@@ -130,12 +135,15 @@ const service = {
           } catch (err) {
             console.log('ERROR XML: ', err);
           }
+            /* ----------- zip ---------- */
         } else if (extension === 'zip') {
           await service.readAdmZip(entryData, entry.entryName)
             .then(() => {
               entry = entries[index] = null;
               entryData = null;
             }).catch(err => console.log('Error reading zip entry: ', err))
+
+            /* ----------- json ---------- */
         } else if (extension === 'json'){
           console.log('JSON!!!', entry);
         } else {
